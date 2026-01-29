@@ -23,3 +23,19 @@ echo "User/OS specific tmux config: $HOME/.tmux.conf.local"
 echo "Location where tmux history is saved [ctrl + a, shift + h, press enter]: $HOME/.tmux.history"
 echo "Tmux cache and plugin install location: $HOME/.tmux"
 
+# Install "tmuxp" (Optional - Session manager)
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux
+
+    # Debian / Ubuntu base distros (or you have apt)
+    if ! command -v apt >/dev/null 2>&1; then
+        sudo apt install tmuxp
+    fi
+
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    if ! command -v brew >/dev/null 2>&1; then
+        brew install tmuxp
+    fi
+
+fi

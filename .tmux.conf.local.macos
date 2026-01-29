@@ -313,7 +313,7 @@ tmux_conf_battery_status_discharging="↓"    # U+2193
 #tmux_conf_battery_status_charging="🔌"     # U+1F50C
 #tmux_conf_battery_status_discharging="🔋"  # U+1F50B
 
-# clock style (when you hit <prefix> + t)
+# clock style (when you hit <prefix> + t)$(date +'%m-%d-%Y_%H%%%M%%%S-%Z')"
 # you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
 tmux_conf_theme_clock_colour="$tmux_conf_theme_colour_4"
 tmux_conf_theme_clock_style="24"
@@ -336,7 +336,9 @@ tmux_conf_copy_to_os_clipboard=true
 set -g history-limit 1000000
 
 # Command prompt history for session. Saved on exit.
-set -g history-file "~/.tmux.history/session-#S"
+#set -g history-file "~/.tmux.history/session-#S"
+session_ts="$(date +'%m-%d-%Y_%H%%%M%%%S-%Z')"
+set -g history-file "~/.tmux.history/session-#S-$session_ts"
 
 # start with mouse mode enabled
 set -g mouse on
@@ -358,7 +360,8 @@ set -g mode-keys vi
 
 # Save tmux history for the current session, window, and pane
 #bind P command-prompt -p 'save history to filename:' -I '~/tmux.history'                  'capture-pane -S -32768 ; save-buffer %1 ; delete-buffer'
-bind H command-prompt -p 'save history to filename:' -I '~/.tmux.history/#S.w-#W_#I.p-#P' 'capture-pane -S - ; save-buffer %1 ; delete-buffer'
+#bind H command-prompt -p 'save history to filename:' -I '~/.tmux.history/#S.w-#W_#I.p-#P' 'capture-pane -S - ; save-buffer %1 ; delete-buffer'
+bind H run "cut -c3- ~/.tmux.conf.local | sh -s prompt_and_save_history"
 
 # Synchronize all panes in a window
 bind C-y set-window-option synchronize-panes
@@ -429,6 +432,16 @@ set -g @continuum-restore 'on'
 #
 # online() {
 #   ping -c 1 1.1.1.1 >/dev/null 2>&1 && printf '✔' || printf '✘'
+# }
+#
+# current_ts() {
+#	#print $(date +"%m-%d-%Y_%H%%%M%%%S-%Z")
+#	date +"%m-%d-%Y_%H%%%M%%%S-%Z"
+# }
+#
+# prompt_and_save_history() {
+#	history_fname="~/.tmux.history/#S.w-#W_#I.p-#P_$(date +'%m-%d-%Y_%H%%%M%%%S-%Z')"
+#	tmux command-prompt -p 'save history to filename:' -I "$history_fname" "capture-pane -S - ; save-buffer %1 ; delete-buffer"
 # }
 #
 # "$@"
